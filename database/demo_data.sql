@@ -1,4 +1,3 @@
--- Airlines
 insert into Airlines (name, country)
 values ('American Airlines', 'USA'),
        ('British Airways', 'UK'),
@@ -16,7 +15,6 @@ values ('American Airlines', 'USA'),
        ('Thai Airways', 'Thailand'),
        ('Qantas Airways', 'Australia');
 
--- Aircrafts
 insert into Aircrafts (airline_id, model, capacity)
 values (1, 'Boeing 737', 180),
        (2, 'Airbus A320', 160),
@@ -34,7 +32,28 @@ values (1, 'Boeing 737', 180),
        (14, 'Airbus A330', 277),
        (15, 'Boeing 737 MAX', 200);
 
--- Crews
+insert into Tickets (reservation_id, flight_id, ticket_number, class, price, status, issued_at)
+values (1, 1, 'AA101-2025-0001', 'Economy', 250.00, 'Valid', '2025-03-25 10:00:00'),
+       (2, 1, 'AA101-2025-0002', 'Business', 250.00, 'Valid', '2025-03-26 11:00:00'),
+       (3, 2, 'BA202-2025-0003', 'Economy', 150.00, 'Cancelled', '2025-03-20 09:00:00'),
+       (4, 2, 'BA202-2025-0004', 'Economy', 150.00, 'Valid', '2025-03-21 10:00:00'),
+       (5, 3, 'EK303-2025-0005', 'Business', 1200.00, 'Valid', '2025-03-22 12:00:00'),
+       (6, 3, 'EK303-2025-0006', 'First Class', 1200.00, 'Valid', '2025-03-22 12:30:00'),
+       (7, 4, 'QR404-2025-0007', 'Economy', 1800.00, 'Cancelled', '2025-03-18 08:00:00'),
+       (8, 4, 'QR404-2025-0008', 'Business', 1800.00, 'Valid', '2025-03-19 09:00:00'),
+       (9, 5, 'SQ505-2025-0009', 'Economy', 900.00, 'Valid', '2025-03-23 13:00:00'),
+       (10, 5, 'SQ505-2025-0010', 'Economy', 900.00, 'Valid', '2025-03-24 14:00:00'),
+       (11, 6, 'LH606-2025-0011', 'Economy', 1100.00, 'Cancelled', '2025-03-17 10:00:00'),
+       (12, 6, 'LH606-2025-0012', 'Business', 1100.00, 'Valid', '2025-03-18 11:00:00'),
+       (13, 7, 'AF707-2025-0013', 'First Class', 950.00, 'Valid', '2025-03-20 12:00:00'),
+       (14, 7, 'AF707-2025-0014', 'Business', 950.00, 'Valid', '2025-03-21 13:00:00'),
+       (15, 8, 'TK808-2025-0015', 'Economy', 1300.00, 'Cancelled', '2025-03-22 09:00:00'),
+       (16, 8, 'TK808-2025-0016', 'Business', 1300.00, 'Valid', '2025-03-23 10:00:00'),
+       (17, 9, 'CX909-2025-0017', 'First Class', 1400.00, 'Valid', '2025-03-24 11:00:00'),
+       (18, 9, 'CX909-2025-0018', 'Economy', 1400.00, 'Valid', '2025-03-25 12:00:00'),
+       (19, 10, 'JL101-2025-0019', 'Economy', 600.00, 'Cancelled', '2025-03-26 08:00:00'),
+       (20, 10, 'JL101-2025-0020', 'Business', 600.00, 'Valid', '2025-03-27 09:00:00');
+
 insert into Crews (first_name, last_name, email, phone, role)
 values ('Michael', 'Smith', 'michael.smith@example.com', '1112223333', 'Pilot'),
        ('Sarah', 'Johnson', 'sarah.johnson@example.com', '2223334444', 'CoPilot'),
@@ -52,7 +71,6 @@ values ('Michael', 'Smith', 'michael.smith@example.com', '1112223333', 'Pilot'),
        ('Charlotte', 'Young', 'charlotte.young@example.com', '4445556667', 'Flight Attendant'),
        ('Benjamin', 'Hall', 'benjamin.hall@example.com', '5556667778', 'Customer Support');
 
--- Flights
 insert into Flights (number, aircraft_id, departure_from, destination, ticket_cost, departure_time, arrival_time)
 values ('AA101', 1, 'New York', 'Los Angeles', 250.00, '2025-04-10 07:00:00', '2025-04-10 10:30:00'),
        ('BA202', 2, 'London', 'Paris', 150.00, '2025-04-12 09:15:00', '2025-04-12 10:45:00'),
@@ -65,7 +83,6 @@ values ('AA101', 1, 'New York', 'Los Angeles', 250.00, '2025-04-10 07:00:00', '2
        ('CX909', 9, 'Hong Kong', 'San Francisco', 1400.00, '2025-04-28 01:00:00', '2025-04-28 10:30:00'),
        ('JL101', 10, 'Tokyo', 'Seoul', 600.00, '2025-04-30 12:30:00', '2025-04-30 14:50:00');
 
--- CrewFlights
 insert into CrewFlights (crew_id, flight_id)
 values (1, 1),
        (2, 1),
@@ -107,7 +124,6 @@ values (1, 1),
        (3, 10),
        (4, 10);
 
--- Passengers
 insert into Passengers (first_name, last_name, email, phone, passport_number, dob, nationality)
 values ('Alice', 'Johnson', 'alice.johnson@example.com', '1234567890', 'P12345678', '1990-05-15', 'USA'),
        ('Bob', 'Smith', 'bob.smith@example.com', '2345678901', 'P23456789', '1985-08-22', 'Canada'),
@@ -130,7 +146,6 @@ values ('Alice', 'Johnson', 'alice.johnson@example.com', '1234567890', 'P1234567
        ('Samuel', 'Scott', 'samuel.scott@example.com', '9990001111', 'P99900111', '1998-12-29', 'India'),
        ('Tina', 'Nelson', 'tina.nelson@example.com', '0001112222', 'P00011222', '1990-06-07', 'South Korea');
 
--- Reservations
 insert into Reservations (passenger_id, flight_id, seat_no, status, booking_date)
 values (1, 1, '12A', 'Confirmed', '2025-03-25'),
        (2, 1, '14C', 'Confirmed', '2025-03-26'),
@@ -153,7 +168,6 @@ values (1, 1, '12A', 'Confirmed', '2025-03-25'),
        (19, 10, '22A', 'Cancelled', '2025-03-26'),
        (20, 10, '23B', 'Confirmed', '2025-03-27');
 
--- Payments
 insert into Payments (reservation_id, amount, payment_method, status)
 values (1, 200.00, '2025-03-25', 'Credit Card', 'Confirmed'),
        (2, 200.00, '2025-03-26', 'Debit Card', 'Confirmed'),
@@ -175,13 +189,12 @@ values (1, 200.00, '2025-03-25', 'Credit Card', 'Confirmed'),
        (18, 240.00, '2025-03-25', 'Credit Card', 'Confirmed'),
        (19, 260.00, '2025-03-26', 'Bank Transfer', 'Rejected'),
        (20, 260.00, '2025-03-27', 'Credit Card', 'Confirmed');
--- Customer Support
+
 insert into CustomerSupport (reservation_id, issue, resolution, is_closed)
 values (3, 'Flight cancellation request', 'Refund processed', 1),
        (5, 'Seat change request', 'Upgraded to business class', 1),
        (2, 'Lost baggage', 'Filed a claim, tracking in progress', 0);
 
--- Flight Analytics
 insert into FlightAnalytics (flight_id, total_passengers, revenue)
 values (1, 180, 36000.00),
        (2, 150, 28500.00),

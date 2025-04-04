@@ -84,6 +84,22 @@ create table if not exists Reservations (
 
 create index if not exists status_reservations on Reservations (status);
 
+create table if not exists Tickets (
+    id integer primary key autoincrement,
+    reservation_id integer not null,
+    flight_id integer not null,
+    ticket_number text unique not null,
+    class text not null check(class in ('Economy', 'Business', 'First Class')),
+    price decimal(10,2) not null,
+    status text default 'Valid' check(status in ('Valid', 'Cancelled', 'Expired')),
+    issued_at text not null default current_timestamp,
+    foreign key (reservation_id) references Reservations(id),
+    foreign key (flight_id) references Flights(id)
+);
+
+create index if not exists ticket_number_tickets on Tickets (ticket_number);
+create index if not exists status_tickets on Tickets (status);
+
 create table if not exists Payments (
     id integer primary key autoincrement,
     reservation_id integer not null,
