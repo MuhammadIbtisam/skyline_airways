@@ -1,11 +1,25 @@
+create table if not exists users (
+    id integer primary key Autoincrement,
+    username TEXT UNIQUE NOT NULL,
+    hashed_password TEXT NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('Admin', 'Pilot', 'CoPilot', 'Flight Attendant', 'Customer Support', 'Passenger')),
+    crew_id INTEGER UNIQUE,
+    passenger_id INTEGER UNIQUE,
+    FOREIGN KEY (crew_id) REFERENCES Crews(id),
+    FOREIGN KEY (passenger_id) REFERENCES Passengers(id)
+);
+
+CREATE INDEX IF NOT EXISTS username_users ON users (username);
+CREATE INDEX IF NOT EXISTS role_users ON users (role);
+
 create table if not exists Airlines (
     id integer primary key Autoincrement,
     name text unique not null,
     country text not null
 );
 
-create index if not exists name_airlines on Airlines (name)
-create index if not exists country_airlines on Airlines (country)
+create index if not exists name_airlines on Airlines (name);
+create index if not exists country_airlines on Airlines (country);
 
 create table if not exists Aircrafts (
     id integer primary key autoincrement,

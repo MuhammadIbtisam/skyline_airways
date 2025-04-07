@@ -1,3 +1,13 @@
+insert into Users (username, hashed_password, role, crew_id, passenger_id)
+VALUES
+    ('admin', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'Admin', NULL, NULL), -- Password: password
+    ('pilot1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Pilot', 1, NULL),     -- Password: password (Crew ID 1: Michael Smith)
+    ('copilot1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'CoPilot', 2, NULL),  -- Password: password (Crew ID 2: Sarah Johnson)
+    ('attendant1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Flight Attendant', 3, NULL), -- Password: password (Crew ID 3: David Brown)
+    ('support1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Customer Support', 5, NULL), -- Password: password (Crew ID 5: Chris Davis)
+    ('passenger1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Passenger', NULL, 1), -- Password: password (Passenger ID 1: Alice Johnson)
+    ('passenger2', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Passenger', NULL, 2); -- Password: password (Passenger ID 2: Bob Smith)
+
 insert into Airlines (name, country)
 values ('American Airlines', 'USA'),
        ('British Airways', 'UK'),
@@ -168,7 +178,7 @@ values (1, 1, '12A', 'Confirmed', '2025-03-25'),
        (19, 10, '22A', 'Cancelled', '2025-03-26'),
        (20, 10, '23B', 'Confirmed', '2025-03-27');
 
-insert into Payments (reservation_id, amount, payment_method, status)
+insert into Payments (reservation_id, amount,payment_date, payment_method, status)
 values (1, 200.00, '2025-03-25', 'Credit Card', 'Confirmed'),
        (2, 200.00, '2025-03-26', 'Debit Card', 'Confirmed'),
        (3, 180.00, '2025-03-20', 'PayPal', 'Rejected'),
