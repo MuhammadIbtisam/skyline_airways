@@ -1,4 +1,7 @@
 import tkinter as tk
+import webbrowser
+import pandas as pd
+import plotly.express as px
 from tkinter import ttk, messagebox
 from database.db_connection import get_db, init_db
 from business_logic.flight_service import FlightService
@@ -22,8 +25,9 @@ class FlightApp(ttk.Frame):
 
         ttk.Label(mfw, text="Manage Flight Options").pack(pady=10)
 
-        ttk.Button(mfw, text="Get All Flights", command=self._get_all_flights).pack(pady=10)
+        ttk.Button(mfw, text="Manage All Flights", command=self._get_all_flights).pack(pady=10)
         ttk.Button(mfw, text="Get Flights by Status", command=self._get_flights_by_status_input).pack(pady=10)
+        ttk.Button(mfw, text="Visualize Flights by Status", command=self._visualize_flights_by_status).pack(pady=10)
         # ttk.Button(mfw, text="Get Flight by id", command=self._get_flight_by_id_input).pack(pady=10)
 
     def _get_all_flights(self):
@@ -252,3 +256,45 @@ class FlightApp(ttk.Frame):
             messagebox.showinfo("Info", "Please select a flight to delete.")
             return
         flight_id = self.flights_tree.item(selected_item[0])['values'][0]
+        print(flight_id)
+        db = next(get_db())
+        try:
+            self.flight_service.delete_flight(db, flight_id)
+            print('I am her e4')
+            messagebox.showinfo("Success", f"Flight ID {flight_id} deleted successfully.")
+            self._populate_flights_tree(self.flights_tree)
+            self.update_window.destroy()
+        except Exception as e:
+            messagebox.showerror("Error", f"Error updating flight: {e}")
+        finally:
+            db.close()
+
+    def _visualize_flights_by_status(self):
+        db = next(get_db())
+        try:
+            all_flights = self.flight_service.list_all_flights(db)
+            if all_flights:
+                df = pd.DataFrame([flight.__dict__ for flight in all_flights])
+                if 'status' in df.columns:
+                    status_counts = df['status'].value_counts().reset_index()
+                    status_counts.columns = ['status', 'count']
+
+                    fig = px.bar(status_counts, x='status', y='count',
+                                 title='Number of Flights by Status',
+                                 labels={'status': 'Flight Status', 'count': 'Number of Flights'})
+
+                    # Save the Plotly chart to an HTML file
+                    import os
+                    temp_file_path = os.path.abspath("flights_by_status.html")
+                    fig.write_html(temp_file_path)
+
+                    # Open the HTML file in the default web browser
+                    webbrowser.open("file://" + temp_file_path)
+                else:
+                    messagebox.showerror("Error", "No 'status' information available for visualization.")
+            else:
+                messagebox.showinfo("Info", "No flights data available to visualize.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Error fetching flight data for visualization: {e}")
+        finally:
+            db.close()
