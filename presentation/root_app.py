@@ -3,6 +3,8 @@ from tkinter import ttk, messagebox
 from business_logic.authentication_service import AuthenticationService
 from business_logic.flight_service import FlightService
 from business_logic.booking_service import BookingService
+from data_access.models import Flight
+from presentation.flight_app import FlightApp
 # from data_access.db_connect import get_db
 # from database.initialize_db import init_db
 from database.db_connection import get_db, init_db
@@ -11,7 +13,7 @@ class RootApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Skyline Airways System - Login")
-        self.geometry("300x200")
+        self.geometry("500x500")
         init_db()
         self.resizable(False, False)
         self.auth_service = AuthenticationService()
@@ -35,6 +37,9 @@ class RootApp(tk.Tk):
         login_button = ttk.Button(self, text="Login", command=self._login)
         login_button.pack(pady=10)
 
+        signup_button = ttk.Button(self, text="Passenger Sign Up", command=self._show_passenger_signup)
+        signup_button.pack(pady=10)
+
     def _login(self):
         username = self.username_var.get()
         password = self.password_var.get()
@@ -50,6 +55,11 @@ class RootApp(tk.Tk):
                 messagebox.showerror("Login Failed", "Invalid username or password.")
         finally:
             db.close()
+
+    def _show_passenger_signup(self):
+        # signup_window = PassengerSignUp(self)
+        # self.wait_window(signup_window)
+        print("Show Passenger Sign Up")
 
     def _show_main_app(self):
         for widget in self.winfo_children():
@@ -76,17 +86,20 @@ class RootApp(tk.Tk):
         ttk.Button(self, text="Manage Airlines", command=lambda: messagebox.showinfo("Admin Action", "Manage Airlines")).pack(pady=5)
         ttk.Button(self, text="Manage Aircrafts", command=lambda: messagebox.showinfo("Admin Action", "Manage Aircrafts")).pack(pady=5)
         ttk.Button(self, text="Manage Crews", command=lambda: messagebox.showinfo("Admin Action", "Manage Crews")).pack(pady=5)
-        ttk.Button(self, text="Manage Flights", command=self._show_manage_flights).pack(pady=5)
+        ttk.Button(self, text="Manage Flights", command=self._load_flight_app).pack(pady=5)
         ttk.Button(self, text="View Reports", command=lambda: messagebox.showinfo("Admin Action", "View Reports")).pack(pady=5)
 
-    def _show_manage_flights(self):
-        # Example of how to use FlightService to get data
-        db = next(get_db())
-        all_flights = self.flight_service.list_all_flights(db)
-        messagebox.showinfo("Manage Flights", f"Number of flights: {len(all_flights)}")
-        db.close()
-        # In a real application, you would display this data in a more user-friendly way
-        # (e.g., in a Treeview widget) and provide options to create, update, and delete flights.
+    def _load_flight_app(self):
+        # Destroy all current widgets in RootApp
+        # for widget in self.winfo_children():
+            # widget.destroy()
+
+        flight_app = FlightApp(self)
+        flight_app._show_manage_flight_options()
+        flight_app.pack(fill="both", expand=True)
+        # Update the window title
+        self.title(f"Skyline Airways System - Flights ({self.current_user_role.capitalize()})")
+
 
     def _show_crew_options(self):
         ttk.Label(self, text="Crew Member Dashboard", font=("Arial", 16)).pack(pady=20)
@@ -139,7 +152,7 @@ class RootApp(tk.Tk):
         for widget in self.winfo_children():
             widget.destroy()
         self.title("Skyline Airways System - Login")
-        self.geometry("300x200")
+        self.geometry("500x500")
         self._create_login_widgets()
 
 if __name__ == "__main__":

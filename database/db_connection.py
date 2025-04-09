@@ -22,10 +22,12 @@ def get_db():
         db.close()
 
 def init_db():
-    db_exists = os.path.exists(DB_NAME)
+    if os.path.exists(DB_NAME):
+        os.remove(DB_NAME)
+        print("Existing database removed.")
 
+    # Create new SQLite connectio
     conn_sqlite = sqlite3.connect(DB_NAME)
-    cursor_sqlite = conn_sqlite.cursor()
 
     try:
         with open(SCHEMA_FILE, 'r') as schema_file:
@@ -35,15 +37,6 @@ def init_db():
     except FileNotFoundError as e:
         print(f"Error opening schema file: {e}")
         raise
-
-    if db_exists:
-        print("Database exists. Clearing Data (using sqlite3).")
-        cursor_sqlite.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
-        tables = cursor_sqlite.fetchall()
-        for table in tables:
-            table_name = table[0]
-            cursor_sqlite.execute(f"DELETE FROM {table_name};")
-            print(f"Cleared data from table: {table_name}")
 
     if os.path.exists(DEMO_DATA_FILE):
         with open(DEMO_DATA_FILE, 'r') as demo_file:
@@ -56,7 +49,7 @@ def init_db():
     conn_sqlite.commit()
     conn_sqlite.close()
 
-    Base.metadata.create_all(bind=engine) # Initialize SQLAlchemy metadata (won't recreate if tables exist)
+    Base.metadata.create_all(bind=engine)
     print("SQLAlchemy metadata initialized.")
 
 if __name__ == "__main__":

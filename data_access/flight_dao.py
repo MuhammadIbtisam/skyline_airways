@@ -6,10 +6,10 @@ class FlightDAO:
     def get_all_flights(self, db: Session):
         return db.query(Flight).all()
 
-    def get_flight_by_id(db: SessionLocal, flight_id: int):
+    def get_flight_by_id(self, db: Session, flight_id: int):
         return db.query(Flight).filter(Flight.id == flight_id).first()
 
-    def get_flights_by_status(db: SessionLocal, status: str):
+    def get_flight_by_status(self, db: Session, status: str):
         return db.query(Flight).filter(Flight.status == status).all()
 
     def get_flights_by_departure(db: SessionLocal, departure_from: str):
@@ -32,7 +32,7 @@ class FlightDAO:
         db.refresh(db_flight)
         return db_flight
 
-    def update_flight(db: SessionLocal, flight_id: int, flight_data: dict):
+    def update_flight(self, db: Session, flight_id: int, flight_data: dict):
         db_flight = db.query(Flight).filter(Flight.id == flight_id).first()
         if db_flight:
             for key, value in flight_data.items():

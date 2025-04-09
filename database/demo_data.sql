@@ -1,12 +1,12 @@
 insert into Users (username, hashed_password, role, crew_id, passenger_id)
 VALUES
     ('admin', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'Admin', NULL, NULL), -- Password: password
-    ('pilot1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Pilot', 1, NULL),     -- Password: password (Crew ID 1: Michael Smith)
-    ('copilot1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'CoPilot', 2, NULL),  -- Password: password (Crew ID 2: Sarah Johnson)
-    ('attendant1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Flight Attendant', 3, NULL), -- Password: password (Crew ID 3: David Brown)
-    ('support1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Customer Support', 5, NULL), -- Password: password (Crew ID 5: Chris Davis)
-    ('passenger1', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Passenger', NULL, 1), -- Password: password (Passenger ID 1: Alice Johnson)
-    ('passenger2', '$2b$12$J.5jnZzZ9/75.Wfr/Q9eueeY.o1Y7j.w/6gL/7p6.o1Y7j.w/6gL', 'Passenger', NULL, 2); -- Password: password (Passenger ID 2: Bob Smith)
+    ('pilot1', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'Pilot', 1, NULL),     -- Password: password (Crew ID 1: Michael Smith)
+    ('copilot1', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'CoPilot', 2, NULL),  -- Password: password (Crew ID 2: Sarah Johnson)
+    ('attendant1', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'Flight Attendant', 3, NULL), -- Password: password (Crew ID 3: David Brown)
+    ('support1', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'Customer Support', 5, NULL), -- Password: password (Crew ID 5: Chris Davis)
+    ('passenger1', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'Passenger', NULL, 1), -- Password: password (Passenger ID 1: Alice Johnson)
+    ('passenger2', '$2b$12$So9uvP3xeYjB9x/85tYHwe6krnfvdYbwu8p46kk0hBZDeeWoHWphG', 'Passenger', NULL, 2); -- Password: password (Passenger ID 2: Bob Smith)
 
 insert into Airlines (name, country)
 values ('American Airlines', 'USA'),
@@ -183,19 +183,19 @@ values (1, 200.00, '2025-03-25', 'Credit Card', 'Confirmed'),
        (2, 200.00, '2025-03-26', 'Debit Card', 'Confirmed'),
        (3, 180.00, '2025-03-20', 'PayPal', 'Rejected'),
        (4, 180.00, '2025-03-21', 'Credit Card', 'Confirmed'),
-       (5, 220.00, '2025-03-22', 'Bank Transfer', 'Checked In'),
+       (5, 220.00, '2025-03-22', 'Bank Transfer', 'Confirmed'),
        (6, 220.00, '2025-03-22', 'Credit Card', 'Confirmed'),
        (7, 175.00, '2025-03-18', 'Cash', 'Rejected'),
        (8, 175.00, '2025-03-19', 'Credit Card', 'Confirmed'),
-       (9, 250.00, '2025-03-23', 'Debit Card', 'Checked In'),
+       (9, 250.00, '2025-03-23', 'Debit Card', 'Confirmed'),
        (10, 250.00, '2025-03-24', 'Credit Card', 'Confirmed'),
        (11, 190.00, '2025-03-17', 'Bank Transfer', 'Rejected'),
        (12, 190.00, '2025-03-18', 'Credit Card', 'Confirmed'),
-       (13, 210.00, '2025-03-20', 'PayPal', 'Checked In'),
+       (13, 210.00, '2025-03-20', 'PayPal', 'Confirmed'),
        (14, 210.00, '2025-03-21', 'Credit Card', 'Confirmed'),
        (15, 230.00, '2025-03-22', 'Debit Card', 'Rejected'),
        (16, 230.00, '2025-03-23', 'Credit Card', 'Confirmed'),
-       (17, 240.00, '2025-03-24', 'Cash', 'Checked In'),
+       (17, 240.00, '2025-03-24', 'Cash', 'Confirmed'),
        (18, 240.00, '2025-03-25', 'Credit Card', 'Confirmed'),
        (19, 260.00, '2025-03-26', 'Bank Transfer', 'Rejected'),
        (20, 260.00, '2025-03-27', 'Credit Card', 'Confirmed');
