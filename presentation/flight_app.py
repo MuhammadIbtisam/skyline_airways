@@ -234,9 +234,8 @@ class FlightApp(ttk.Frame):
             "ticket_cost": float(self.update_cost_entry.get()),
             "departure_from": self.update_departure_from_entry.get(),
             "destination": self.update_destination_entry.get(),
-            "departure_time": self.update_departure_time_entry.get(),  # Consider date/time handling
-            "arrival_time": self.update_arrival_time_entry.get(),  # Consider date/time handling
-            # You might not want to update created_at or updated_at here
+            "departure_time": self.update_departure_time_entry.get(),
+            "arrival_time": self.update_arrival_time_entry.get(),
         }
         db = next(get_db())
         try:
@@ -272,29 +271,17 @@ class FlightApp(ttk.Frame):
     def _visualize_flights_by_status(self):
         db = next(get_db())
         try:
-            all_flights = self.flight_service.list_all_flights(db)
-            if all_flights:
-                df = pd.DataFrame([flight.__dict__ for flight in all_flights])
-                if 'status' in df.columns:
-                    status_counts = df['status'].value_counts().reset_index()
-                    status_counts.columns = ['status', 'count']
-
-                    fig = px.bar(status_counts, x='status', y='count',
-                                 title='Number of Flights by Status',
-                                 labels={'status': 'Flight Status', 'count': 'Number of Flights'})
-
-                    # Save the Plotly chart to an HTML file
-                    import os
-                    temp_file_path = os.path.abspath("flights_by_status.html")
-                    fig.write_html(temp_file_path)
-
-                    # Open the HTML file in the default web browser
-                    webbrowser.open("file://" + temp_file_path)
-                else:
-                    messagebox.showerror("Error", "No 'status' information available for visualization.")
+            status_counts = self.flight_service.get_flight_status_counts(db)
+            if status_counts:
+                df = pd.DataFrame(status_counts)
+                fig = px.bar(df, x='status', y='count',
+                             title='Number of Flights by Status',
+                             labels={'status': 'Flight Status', 'count': 'Number of Flights'})
+                fig.show()
             else:
-                messagebox.showinfo("Info", "No flights data available to visualize.")
+                messagebox.showinfo("Info", "No flight data available.")
         except Exception as e:
-            messagebox.showerror("Error", f"Error fetching flight data for visualization: {e}")
+            messagebox.showerror("Error", f"Error fetching data: {e}")
         finally:
             db.close()
+

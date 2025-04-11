@@ -3,10 +3,10 @@ from tkinter import ttk, messagebox
 from business_logic.authentication_service import AuthenticationService
 from business_logic.flight_service import FlightService
 from business_logic.booking_service import BookingService
-from data_access.models import Flight
+from presentation.aircraft_app import AircraftApp
 from presentation.flight_app import FlightApp
-# from data_access.db_connect import get_db
-# from database.initialize_db import init_db
+from presentation.airline_app import AirlineApp
+from presentation.report_app import ReportApp
 from database.db_connection import get_db, init_db
 
 class RootApp(tk.Tk):
@@ -83,21 +83,35 @@ class RootApp(tk.Tk):
 
     def _show_admin_options(self):
         ttk.Label(self, text="Admin Dashboard", font=("Arial", 16)).pack(pady=20)
-        ttk.Button(self, text="Manage Airlines", command=lambda: messagebox.showinfo("Admin Action", "Manage Airlines")).pack(pady=5)
-        ttk.Button(self, text="Manage Aircrafts", command=lambda: messagebox.showinfo("Admin Action", "Manage Aircrafts")).pack(pady=5)
-        ttk.Button(self, text="Manage Crews", command=lambda: messagebox.showinfo("Admin Action", "Manage Crews")).pack(pady=5)
+        ttk.Button(self, text="Manage Airlines", command=self._manage_airlines).pack(pady=5)
+        ttk.Button(self, text="Manage Aircrafts", command=self._manage_aircrafts).pack(pady=5)
+        ttk.Button(self, text="Manage Crews", command=self._manage_aircrafts).pack(pady=5)
         ttk.Button(self, text="Manage Flights", command=self._load_flight_app).pack(pady=5)
-        ttk.Button(self, text="View Reports", command=lambda: messagebox.showinfo("Admin Action", "View Reports")).pack(pady=5)
+        ttk.Button(self, text="View Reports", command=self._view_reports).pack(pady=5)
+
+    def _manage_airlines(self):
+        airline_app = AirlineApp(self)
+        airline_app._show_manage_airline_options()
+        airline_app.pack(fill="both", expand=True)
+        self.title(f"Manage Airlines - {self.current_user_role.capitalize()}")
+
+    def _manage_aircrafts(self):
+        aircraft_app = AircraftApp(self)
+        aircraft_app._show_manage_aircraft_options()
+        aircraft_app.pack(fill="both", expand=True)
+        self.title(f"Manage Aircrafts - {self.current_user_role.capitalize()}")
+
+    def _view_reports(self):
+        report_app = ReportApp(self)
+        report_app._show_manage_report_options()
+        report_app.pack(fill="both", expand=True)
+        self.title(f"Manage Report_app - {self.current_user_role.capitalize()}")
 
     def _load_flight_app(self):
-        # Destroy all current widgets in RootApp
-        # for widget in self.winfo_children():
-            # widget.destroy()
 
         flight_app = FlightApp(self)
         flight_app._show_manage_flight_options()
         flight_app.pack(fill="both", expand=True)
-        # Update the window title
         self.title(f"Skyline Airways System - Flights ({self.current_user_role.capitalize()})")
 
 

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from data_access.models import Flight, User, CrewFlight
+from data_access.models import Flight, User, CrewFlight, Aircraft, Airline, Reservation, Ticket
 from data_access.db_connect import get_db, SessionLocal
+from sqlalchemy import select, func
 
 class FlightDAO:
     def get_all_flights(self, db: Session):
@@ -41,14 +42,60 @@ class FlightDAO:
             db.refresh(db_flight)
         return db_flight
 
-    def delete_flight(db: SessionLocal, flight_id: int):
+    def delete_flight(self, db: Session, flight_id: int):
         db_flight = db.query(Flight).filter(Flight.id == flight_id).first()
+        print('I am here')
         if db_flight:
+            print('I am here 2')
             db.delete(db_flight)
             db.commit()
             return True
         return False
 
+    def get_flight_status_counts(self, db: Session) -> list:
+        try:
+            query = select(Flight.status, func.count(Flight.id)). \
+                group_by(Flight.status)
+            result = db.execute(query).fetchall()
+            return [{"status": row[0], "count": row[1]} for row in result]
+        except Exception as e:
+            print(f"Error fetching flight status counts: {e}")
+            return []
 
-# def get_all_flights():
-#     return None
+    def get_total_revenue_per_airline(self, db: Session):
+        try:
+            query = select(
+                Airline.name.label('airline_name'),
+                func.sum(Ticket.price).label('total_revenue')
+            ). \
+                join(Aircraft, Airline.id == Aircraft.airline_id). \
+                join(Flight, Aircraft.id == Flight.aircraft_id). \
+                join(Reservation, Flight.id == Reservation.flight_id). \
+                join(Ticket, Reservation.id == Ticket.reservation_id). \
+                group_by(Airline.name)
+
+            result = db.execute(query).fetchall()
+            print(len(result))
+            print('I am here')
+            return [{"airline_name": row.airline_name,
+                     "total_revenue": float(row.total_revenue) if row.total_revenue else 0.0} for row in result]
+        except Exception as e:
+            print(f"Error fetching total revenue per airline (corrected): {e}")
+            return []
+
+    def get_passenger_traffic_by_route(self, db: Session):
+        try:
+            query = select(
+                Flight.departure_from,
+                Flight.destination,
+                func.count(Reservation.passenger_id).label('passenger_count')
+            ). \
+                join(Reservation, Flight.id == Reservation.flight_id). \
+                group_by(Flight.departure_from, Flight.destination)
+
+            result = db.execute(query).fetchall()
+            return [{"departure_from": row[0], "destination": row[1], "passenger_count": row.passenger_count} for row in
+                    result]
+        except Exception as e:
+            print(f"Error fetching passenger traffic by route: {e}")
+            return []

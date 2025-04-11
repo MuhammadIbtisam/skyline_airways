@@ -28,6 +28,7 @@ values ('American Airlines', 'USA'),
 insert into Aircrafts (airline_id, model, capacity)
 values (1, 'Boeing 737', 180),
        (2, 'Airbus A320', 160),
+        (3, 'Boeing 737', 180),
        (3, 'Boeing 777', 396),
        (4, 'Airbus A380', 850),
        (5, 'Boeing 787 Dreamliner', 296),
@@ -39,7 +40,9 @@ values (1, 'Boeing 737', 180),
        (11, 'Boeing 747', 660),
        (12, 'Boeing 757', 228),
        (13, 'Airbus A321', 185),
+       (13, 'Boeing 767', 375),
        (14, 'Airbus A330', 277),
+       (15, 'Boeing 767', 375),
        (15, 'Boeing 737 MAX', 200);
 
 insert into Tickets (reservation_id, flight_id, ticket_number, class, price, status, issued_at)
