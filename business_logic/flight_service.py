@@ -15,8 +15,8 @@ class FlightService:
     def get_flight_by_id(self, db: Session, flight_id: int):
         return self.flight_dao.get_flight_by_id(db, flight_id)
 
-    def create_flight(self, flight_data: dict):
-        return self.flight_dao.add_flight(self.db_session, flight_data)
+    def create_flight(self, db: Session, flight_data: dict):
+        return self.flight_dao.create_flight(db, flight_data)
 
     def update_flight(self, db: Session, flight_id: int, flight_data: dict):
         return self.flight_dao.update_flight(db, flight_id, flight_data)

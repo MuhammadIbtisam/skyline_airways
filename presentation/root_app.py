@@ -7,6 +7,8 @@ from presentation.aircraft_app import AircraftApp
 from presentation.flight_app import FlightApp
 from presentation.airline_app import AirlineApp
 from presentation.report_app import ReportApp
+from presentation.crew_app import CrewApp
+from presentation.passenger_app import PassengerApp
 from database.db_connection import get_db, init_db
 
 class RootApp(tk.Tk):
@@ -57,9 +59,10 @@ class RootApp(tk.Tk):
             db.close()
 
     def _show_passenger_signup(self):
-        # signup_window = PassengerSignUp(self)
-        # self.wait_window(signup_window)
-        print("Show Passenger Sign Up")
+        passenger_app = PassengerApp(self)
+        self.title("Register Passenger")
+        passenger_app.grab_set()
+        self.wait_window(passenger_app)
 
     def _show_main_app(self):
         for widget in self.winfo_children():
@@ -85,7 +88,7 @@ class RootApp(tk.Tk):
         ttk.Label(self, text="Admin Dashboard", font=("Arial", 16)).pack(pady=20)
         ttk.Button(self, text="Manage Airlines", command=self._manage_airlines).pack(pady=5)
         ttk.Button(self, text="Manage Aircrafts", command=self._manage_aircrafts).pack(pady=5)
-        ttk.Button(self, text="Manage Crews", command=self._manage_aircrafts).pack(pady=5)
+        ttk.Button(self, text="Manage Crews", command=self._manage_crews).pack(pady=5)
         ttk.Button(self, text="Manage Flights", command=self._load_flight_app).pack(pady=5)
         ttk.Button(self, text="View Reports", command=self._view_reports).pack(pady=5)
 
@@ -101,18 +104,24 @@ class RootApp(tk.Tk):
         aircraft_app.pack(fill="both", expand=True)
         self.title(f"Manage Aircrafts - {self.current_user_role.capitalize()}")
 
+    def _load_flight_app(self):
+        flight_app = FlightApp(self)
+        flight_app._show_manage_flight_options()
+        flight_app.pack(fill="both", expand=True)
+        self.title(f"Skyline Airways System - Flights ({self.current_user_role.capitalize()})")
+
+
+    def _manage_crews(self):
+        crew_app = CrewApp(self)
+        crew_app._show_manage_crew_options()
+        crew_app.pack(fill="both", expand=True)
+        self.title(f"Manage Crews - {self.current_user_role.capitalize()}")
+
     def _view_reports(self):
         report_app = ReportApp(self)
         report_app._show_manage_report_options()
         report_app.pack(fill="both", expand=True)
         self.title(f"Manage Report_app - {self.current_user_role.capitalize()}")
-
-    def _load_flight_app(self):
-
-        flight_app = FlightApp(self)
-        flight_app._show_manage_flight_options()
-        flight_app.pack(fill="both", expand=True)
-        self.title(f"Skyline Airways System - Flights ({self.current_user_role.capitalize()})")
 
 
     def _show_crew_options(self):

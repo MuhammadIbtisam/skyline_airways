@@ -5,6 +5,7 @@ import plotly.express as px
 from tkinter import ttk, messagebox
 from database.db_connection import get_db, init_db
 from business_logic.flight_service import FlightService
+from business_logic.aircraft_service import AircraftService
 
 class FlightApp(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -38,16 +39,16 @@ class FlightApp(ttk.Frame):
             "ID", "Number", "Status", "Ticket Cost", "Departure From", "Destination", "Departure Time", "Arrival Time",
             'Created At', "Updated At"
         ), show="headings")
-        self.flights_tree.heading("#0", text="ID")
-        self.flights_tree.heading("#1", text="Number")
-        self.flights_tree.heading("#2", text="Status")
-        self.flights_tree.heading("#3", text="Ticket Cost")
-        self.flights_tree.heading("#4", text="Departure From")
-        self.flights_tree.heading("#5", text="Destination")
-        self.flights_tree.heading("#6", text="Departure Time")
-        self.flights_tree.heading("#7", text="Arrival Time")
-        self.flights_tree.heading("#8", text="Created At")
-        self.flights_tree.heading("#9", text="Updated At")
+        self.flights_tree.heading("#1", text="ID")
+        self.flights_tree.heading("#2", text="Number")
+        self.flights_tree.heading("#3", text="Status")
+        self.flights_tree.heading("#4", text="Ticket Cost")
+        self.flights_tree.heading("#5", text="Departure From")
+        self.flights_tree.heading("#6", text="Destination")
+        self.flights_tree.heading("#7", text="Departure Time")
+        self.flights_tree.heading("#8", text="Arrival Time")
+        self.flights_tree.heading("#9", text="Created At")
+        self.flights_tree.heading("#10", text="Updated At")
         self._populate_flights_tree(self.flights_tree)
 
         self.flights_tree.pack(fill="both", expand=True, padx=10, pady=10)
@@ -155,10 +156,102 @@ class FlightApp(ttk.Frame):
         window.destroy()
 
     def _open_add_flight_form(self):
-        add_flight_window = tk.Toplevel(self)
-        add_flight_window.title("Add New Flight")
-        # Add your form elements (Labels, Entry widgets, etc.) here
-        # and a Save button that calls a _save_new_flight method
+        self.add_flight_window = tk.Toplevel(self)
+        self.add_flight_window.title("Add New Flight")
+
+        # Fetch available aircraft IDs for the dropdown
+        db = next(get_db())
+        aircraft_service = AircraftService()
+        aircrafts = aircraft_service.list_all_aircrafts(db)
+        aircraft_ids = [aircraft.id for aircraft in aircrafts]
+        db.close()
+
+        ttk.Label(self.add_flight_window, text="Flight Number:").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        self.add_number_entry = ttk.Entry(self.add_flight_window)
+        self.add_number_entry.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(self.add_flight_window, text="Aircraft ID:").grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.add_aircraft_combo = ttk.Combobox(self.add_flight_window, values=aircraft_ids, state="readonly")
+        self.add_aircraft_combo.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(self.add_flight_window, text="Ticket Cost:").grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        self.add_ticket_cost_entry = ttk.Entry(self.add_flight_window)
+        self.add_ticket_cost_entry.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(self.add_flight_window, text="Departure From:").grid(row=3, column=0, padx=5, pady=5, sticky="w")
+        self.add_departure_from_entry = ttk.Entry(self.add_flight_window)
+        self.add_departure_from_entry.grid(row=3, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(self.add_flight_window, text="Destination:").grid(row=4, column=0, padx=5, pady=5, sticky="w")
+        self.add_destination_entry = ttk.Entry(self.add_flight_window)
+        self.add_destination_entry.grid(row=4, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(self.add_flight_window, text="Departure Time (YYYY-MM-DD HH:MM:SS):").grid(row=5, column=0, padx=5,
+                                                                                             pady=5, sticky="w")
+        self.add_departure_time_entry = ttk.Entry(self.add_flight_window)
+        self.add_departure_time_entry.grid(row=5, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(self.add_flight_window, text="Arrival Time (YYYY-MM-DD HH:MM:SS):").grid(row=6, column=0, padx=5,
+                                                                                           pady=5, sticky="w")
+        self.add_arrival_time_entry = ttk.Entry(self.add_flight_window)
+        self.add_arrival_time_entry.grid(row=6, column=1, padx=5, pady=5, sticky="ew")
+
+        save_button = ttk.Button(self.add_flight_window, text="Save", command=self._save_new_flight)
+        save_button.grid(row=7, column=0, columnspan=2, pady=10)
+
+        self.add_flight_window.grid_columnconfigure(1, weight=1)
+
+    def _save_new_flight(self):
+        new_number = self.add_number_entry.get()
+        new_aircraft_id = self.add_aircraft_combo.get()
+        new_ticket_cost = self.add_ticket_cost_entry.get()
+        new_departure_from = self.add_departure_from_entry.get()
+        new_destination = self.add_destination_entry.get()
+        new_departure_time = self.add_departure_time_entry.get()
+        new_arrival_time = self.add_arrival_time_entry.get()
+
+        if not new_number or not new_aircraft_id or not new_ticket_cost or not new_departure_from or not new_destination or not new_departure_time or not new_arrival_time:
+            messagebox.showerror("Error", "Please fill in all flight details.")
+            return
+
+        try:
+            aircraft_id_int = int(new_aircraft_id)
+            ticket_cost_float = float(new_ticket_cost)
+            # Basic format check for time (you might want more robust validation)
+            # Example: YYYY-MM-DD HH:MM:SS
+            if len(new_departure_time) != 19 or len(new_arrival_time) != 19:
+                messagebox.showerror("Error", "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS")
+                return
+        except ValueError:
+            messagebox.showerror("Error", "Invalid Aircraft ID or Ticket Cost.")
+            return
+
+        new_flight_data = {
+            "number": new_number,
+            "aircraft_id": aircraft_id_int,
+            "ticket_cost": ticket_cost_float,
+            "departure_from": new_departure_from,
+            "destination": new_destination,
+            "departure_time": new_departure_time,
+            "arrival_time": new_arrival_time
+        }
+        db = next(get_db())
+        flight_service = FlightService()
+        try:
+            success = flight_service.create_flight(db, new_flight_data)
+            if success:
+                messagebox.showinfo("Success", f"Flight '{new_number}' added successfully.")
+                # Assuming you have a _populate_flights_tree method
+                if hasattr(self, '_populate_flights_tree'):
+                    self._populate_flights_tree(self.flights_tree)
+                self.add_flight_window.destroy()
+            else:
+                messagebox.showerror("Error", f"Could not add flight '{new_number}'.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Error adding new flight: {e}")
+            db.rollback()
+        finally:
+            db.close()
 
     def _open_update_flight_form(self):
         selected_item = self.flights_tree.selection()

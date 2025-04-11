@@ -26,7 +26,7 @@ class FlightDAO:
             return flights
         return []
 
-    def create_flight(db: SessionLocal, flight_data: dict):
+    def create_flight(self, db: Session, flight_data: dict):
         db_flight = Flight(**flight_data)
         db.add(db_flight)
         db.commit()
