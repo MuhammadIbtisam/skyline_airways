@@ -4,6 +4,7 @@ from business_logic.authentication_service import AuthenticationService
 from business_logic.flight_service import FlightService
 from business_logic.booking_service import BookingService
 from presentation.aircraft_app import AircraftApp
+from presentation.customer_support_app import CustomerSupportApp
 from presentation.flight_app import FlightApp
 from presentation.airline_app import AirlineApp
 from presentation.report_app import ReportApp
@@ -24,6 +25,7 @@ class RootApp(tk.Tk):
         self.current_user_id = None
         self.current_user_role = None
         self.crew_app_instance = None
+        self.cs_app_instance = None
         self.username_var = tk.StringVar()
         self.password_var = tk.StringVar()
 
@@ -127,8 +129,7 @@ class RootApp(tk.Tk):
 #Crew Options Here
     def _show_crew_options(self):
         ttk.Label(self, text="Crew Member Dashboard", font=("Arial", 16)).pack(pady=20)
-        ttk.Button(self, text="View Flight Schedule", command=self._load_crew_schedule_view).pack(pady=5)  # Direct call
-        # ttk.Button(self, text="Update Flight Status", command=self._open_update_flight_status_window).pack(pady=5)
+        ttk.Button(self, text="Manage Flight Schedule", command=self._load_crew_schedule_view).pack(pady=5)
 
         if not self.crew_app_instance:
             self.crew_app_instance = CrewApp(self, self.current_user_id)  # Create and pass ID
@@ -143,8 +144,17 @@ class RootApp(tk.Tk):
 
     def _show_customer_support_options(self):
         ttk.Label(self, text="Customer Support Portal", font=("Arial", 16)).pack(pady=20)
-        ttk.Button(self, text="View Open Issues", command=lambda: messagebox.showinfo("Support Action", "View Open Issues")).pack(pady=5)
-        ttk.Button(self, text="Resolve Issues", command=lambda: messagebox.showinfo("Support Action", "Resolve Issues")).pack(pady=5)
+        ttk.Button(self, text="Manage Customer Support Issues", command=self._load_customer_support_issues).pack(pady=5)
+        if not self.cs_app_instance:
+            self.cs_app_instance = CustomerSupportApp(self)
+
+    def _load_customer_support_issues(self):
+        if self.cs_app_instance:
+            self.cs_app_instance._view_customer_support_issues()
+            self.cs_app_instance.pack(fill="both", expand=True)
+            self.title(f"Customer Support Issues - {self.current_user_role.capitalize()}")
+        else:
+            messagebox.showinfo("Info", "Crew dashboard not initialized.")
 
     def _show_passenger_options(self):
         ttk.Label(self, text="Passenger Portal", font=("Arial", 16)).pack(pady=20)
