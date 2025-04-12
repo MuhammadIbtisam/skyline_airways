@@ -23,7 +23,7 @@ class RootApp(tk.Tk):
         self.booking_service = BookingService()
         self.current_user_id = None
         self.current_user_role = None
-
+        self.crew_app_instance = None
         self.username_var = tk.StringVar()
         self.password_var = tk.StringVar()
 
@@ -124,25 +124,22 @@ class RootApp(tk.Tk):
         self.title(f"Manage Report_app - {self.current_user_role.capitalize()}")
 
 
+#Crew Options Here
     def _show_crew_options(self):
         ttk.Label(self, text="Crew Member Dashboard", font=("Arial", 16)).pack(pady=20)
-        ttk.Button(self, text="View Flight Schedule", command=self._view_flight_schedule).pack(pady=5)
-        ttk.Button(self, text="Update Flight Status", command=lambda: messagebox.showinfo("Crew Action", "Update Flight Status")).pack(pady=5)
+        ttk.Button(self, text="View Flight Schedule", command=self._load_crew_schedule_view).pack(pady=5)  # Direct call
+        # ttk.Button(self, text="Update Flight Status", command=self._open_update_flight_status_window).pack(pady=5)
 
-    def _view_flight_schedule(self):
-        if self.current_user_role in ("Pilot", "CoPilot", "Flight Attendant"):
-            db = next(get_db())
-            schedule = self.flight_service.get_flight_schedule_for_crew(db, self.current_user_id)
-            db.close()
-            if schedule:
-                schedule_text = "Your Flight Schedule:\n"
-                for flight in schedule:
-                    schedule_text += f"Flight: {flight['number']}, From: {flight['departure_from']}, To: {flight['destination']}, Depart: {flight['departure_time']}, Arrive: {flight['arrival_time']}\n"
-                messagebox.showinfo("Flight Schedule", schedule_text)
-            else:
-                messagebox.showinfo("Flight Schedule", "No flights scheduled for you.")
+        if not self.crew_app_instance:
+            self.crew_app_instance = CrewApp(self, self.current_user_id)  # Create and pass ID
+
+    def _load_crew_schedule_view(self):
+        if self.crew_app_instance:
+            self.crew_app_instance._view_crew_flight_schedule()
+            self.crew_app_instance.pack(fill="both", expand=True)
+            self.title(f"Your Flight Schedule - {self.current_user_role.capitalize()}")
         else:
-            messagebox.showerror("Error", "This action is only for crew members.")
+            messagebox.showinfo("Info", "Crew dashboard not initialized.")
 
     def _show_customer_support_options(self):
         ttk.Label(self, text="Customer Support Portal", font=("Arial", 16)).pack(pady=20)
