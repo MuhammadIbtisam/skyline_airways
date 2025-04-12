@@ -42,6 +42,17 @@ class CrewService:
     def update_crew(self, db: Session, crew_id: int, crew_data: dict):
         return self.crew_dao.update_crew(db, crew_id, crew_data)
 
+    def get_crew_flight_schedule(self, db: Session, crew_id: int):
+        crew = self.get_crew_by_id(db, crew_id)
+        if not crew:
+            return None, f"Crew member with ID {crew_id} not found."
+
+        try:
+            flights = self.crew_dao.get_flight_schedule_for_crew(db, crew_id)
+            return flights, None
+        except Exception as e:
+            return None, f"Error retrieving flight schedule for crew {crew_id}: {e}"
+
     # def delete_crew(self, db: Session, crew_id: int):
     #     val = self.crew_dao.delete_crew(db, crew_id)
     #     return val

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from data_access.models import Crew
+from data_access.models import Crew, CrewFlight, Flight
 from data_access.db_connect import get_db, SessionLocal
 from sqlalchemy import select, func
 
@@ -27,3 +27,14 @@ class CrewDAO:
         db.commit()
         db.refresh(db_crew)
         return db_crew.id
+
+    def get_flight_schedule_for_crew(self, db: Session, crew_id: int):
+        try:
+            flights = (db.query(Flight)
+                       .join(CrewFlight, Flight.id == CrewFlight.flight_id)
+                       .filter(CrewFlight.crew_id == crew_id)
+                       .all())
+            return flights
+        except Exception as e:
+            print(f"Error getting flight schedule for crew {crew_id}: {e}")
+            return []

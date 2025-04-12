@@ -3,6 +3,7 @@ from data_access.models import Flight, User, CrewFlight, Aircraft, Airline, Rese
 from data_access.db_connect import get_db, SessionLocal
 from sqlalchemy import select, func
 
+
 class FlightDAO:
     def get_all_flights(self, db: Session):
         return db.query(Flight).all()
@@ -12,6 +13,9 @@ class FlightDAO:
 
     def get_flight_by_status(self, db: Session, status: str):
         return db.query(Flight).filter(Flight.status == status).all()
+
+    def get_flight_by_number(self, db: Session, number: str):
+        return db.query(Flight).filter(Flight.number == number).first()
 
     def get_flights_by_departure(db: SessionLocal, departure_from: str):
         return db.query(Flight).filter(Flight.departure_from == departure_from).all()

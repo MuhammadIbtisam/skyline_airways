@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from data_access.flight_dao import FlightDAO
 from sqlalchemy.orm import Session
 
@@ -15,6 +17,9 @@ class FlightService:
     def get_flight_by_id(self, db: Session, flight_id: int):
         return self.flight_dao.get_flight_by_id(db, flight_id)
 
+    def get_flight_by_number(self, db: Session, flight_number: str):
+        return self.flight_dao.get_flight_by_number(db, flight_number)
+
     def create_flight(self, db: Session, flight_data: dict):
         return self.flight_dao.create_flight(db, flight_data)
 
@@ -27,3 +32,20 @@ class FlightService:
 
     def get_flight_status_counts(self, db: Session):
         return self.flight_dao.get_flight_status_counts(db)
+
+    def get_flight_schedule_for_crew(self, db: Session, crew_id: int):
+        return self.flight_dao.get_flight_schedule_for_crew(db, crew_id)
+
+    def update_flight_status(self, db: Session, flight_number: str, new_status: str):
+        flight = self.flight_dao.get_flight_by_number(db, flight_number)
+        if not flight:
+            return False, f"Flight with number {flight_number} not found."
+        try:
+            update_data = {"status": new_status, "updated_at": datetime.now()}
+            self.flight_dao.update_flight(db, flight.id, update_data)
+            db.commit()
+            return True, None
+        except Exception as e:
+            db.rollback()
+            return False, f"Error updating flight status for {flight_number}: {e}"
+
