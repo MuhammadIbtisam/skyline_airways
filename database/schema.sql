@@ -27,7 +27,7 @@ create table if not exists Aircrafts (
     model text not null,
     capacity integer not null,
     created_at text not null default current_timestamp,
-    foreign key (airline_id) references Airlines(id)
+    foreign key (airline_id) references Airlines(id) ON DELETE CASCADE
 );
 
 create index if not exists model_aircrafts on Aircrafts (model);
@@ -55,7 +55,7 @@ create table if not exists Flights (
     arrival_time text not null,
     created_at text not null default current_timestamp,
     updated_at text not null default current_timestamp,
-    foreign key (aircraft_id) references Aircrafts(id)
+    foreign key (aircraft_id) references Aircrafts(id) ON DELETE CASCADE
 );
 
 create index if not exists number_flights on Flights (number);
@@ -63,10 +63,10 @@ create index if not exists status_flights on Flights (status);
 
 create table if not exists CrewFlights (
     crew_id integer not null,
-    flight_id integer not null,
+    flight_id integer,
     primary key (crew_id, flight_id),
-    foreign key (crew_id) references Crews(id),
-    foreign key (flight_id) references Flights(id)
+    foreign key (crew_id) references Crews(id)  ON DELETE CASCADE,
+    foreign key (flight_id) references Flights(id)  ON DELETE CASCADE
 );
 
 create table if not exists Passengers (
@@ -87,13 +87,13 @@ create index if not exists nationality_passengers on Passengers (nationality);
 
 create table if not exists Reservations (
     id integer primary key autoincrement,
-    passenger_id integer not null,
-    flight_id integer not null,
+    passenger_id integer,
+    flight_id integer,
     seat_no text not null,
     status text default 'Confirmed' check(status in ('Confirmed', 'Cancelled', 'Checked In')),
     booking_date text not null,
-    foreign key (passenger_id) references Passengers(id),
-    foreign key (flight_id) references Flights(id)
+    foreign key (passenger_id) references Passengers(id)  ON DELETE CASCADE,
+    foreign key (flight_id) references Flights(id)  ON DELETE CASCADE
 );
 
 create index if not exists status_reservations on Reservations (status);
@@ -101,14 +101,14 @@ create index if not exists status_reservations on Reservations (status);
 create table if not exists Tickets (
     id integer primary key autoincrement,
     reservation_id integer not null,
-    flight_id integer not null,
+    flight_id integer,
     ticket_number text unique not null,
     class text not null check(class in ('Economy', 'Business', 'First Class')),
     price decimal(10,2) not null,
     status text default 'Valid' check(status in ('Valid', 'Cancelled', 'Expired')),
     issued_at text not null default current_timestamp,
-    foreign key (reservation_id) references Reservations(id),
-    foreign key (flight_id) references Flights(id)
+    foreign key (reservation_id) references Reservations(id)  ON DELETE CASCADE,
+    foreign key (flight_id) references Flights(id)  ON DELETE CASCADE
 );
 
 create index if not exists ticket_number_tickets on Tickets (ticket_number);
@@ -121,7 +121,7 @@ create table if not exists Payments (
     payment_date text not null default current_timestamp,
     payment_method text not null,
     status text default 'Pending' check(status in ('Pending', 'Confirmed', 'Rejected')),
-    foreign key (reservation_id) references Reservations(id)
+    foreign key (reservation_id) references Reservations(id)  ON DELETE CASCADE
 );
 
 create index if not exists status_payments on Payments (status);
@@ -134,13 +134,5 @@ create table if not exists CustomerSupport (
     is_closed boolean default 0,
     created_at text not null default current_timestamp,
     updated_at text not null default current_timestamp,
-    foreign key (reservation_id) references Reservations(id)
-);
-
-create table if not exists FlightAnalytics (
-    id integer primary key autoincrement,
-    flight_id integer not null,
-    total_passengers integer not null,
-    revenue decimal(10,2) not null,
-    foreign key (flight_id) references Flights(id)
+    foreign key (reservation_id) references Reservations(id)  ON DELETE CASCADE
 );

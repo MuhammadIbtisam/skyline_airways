@@ -1,15 +1,6 @@
 import tkinter as tk
-from datetime import datetime
-
-import pandas as pd
-import plotly.express as px
 from tkinter import ttk, messagebox
-
-from matplotlib import pyplot as plt
-
-from database.db_connection import get_db, init_db
-from business_logic.crew_service import CrewService
-from business_logic.flight_service import FlightService
+from database.db_connection import get_db
 from business_logic.customer_support_service import CustomerSupportService
 
 
@@ -17,8 +8,6 @@ class CustomerSupportApp(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent = parent
-        # self.root = parent
-        # self.current_user_id = current_user_id
         self._create_widgets()
         # self.crew_service = CrewService()
         # self.flight_service = FlightService()

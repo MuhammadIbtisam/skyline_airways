@@ -10,6 +10,7 @@ from presentation.airline_app import AirlineApp
 from presentation.report_app import ReportApp
 from presentation.crew_app import CrewApp
 from presentation.passenger_app import PassengerApp
+from presentation.reservation_app import ReservationApp
 from database.db_connection import get_db, init_db
 
 class RootApp(tk.Tk):
@@ -25,6 +26,7 @@ class RootApp(tk.Tk):
         self.current_user_id = None
         self.current_user_role = None
         self.crew_app_instance = None
+        self.reservation_app_instance = None
         self.cs_app_instance = None
         self.username_var = tk.StringVar()
         self.password_var = tk.StringVar()
@@ -158,23 +160,18 @@ class RootApp(tk.Tk):
 
     def _show_passenger_options(self):
         ttk.Label(self, text="Passenger Portal", font=("Arial", 16)).pack(pady=20)
-        ttk.Button(self, text="Book Flight", command=lambda: messagebox.showinfo("Passenger Action", "Book Flight")).pack(pady=5)
-        ttk.Button(self, text="View/Cancel Bookings", command=self._view_passenger_bookings).pack(pady=5)
+        ttk.Button(self, text="View Bookings",  command=self._load_passenger_bookings).pack(pady=5)
+        # ttk.Button(self, text="View/Cancel Bookings", command=self._view_passenger_bookings).pack(pady=5)
+        if not self.reservation_app_instance:
+            self.reservation_app_instance = ReservationApp(self, self.current_user_id)
 
-    def _view_passenger_bookings(self):
-        if self.current_user_role == "Passenger":
-            db = next(get_db())
-            bookings = self.booking_service.get_passenger_bookings(db, self.current_user_id)
-            db.close()
-            if bookings:
-                bookings_text = "Your Bookings:\n"
-                for booking in bookings:
-                    bookings_text += f"Flight: {booking['flight_number']}, From: {booking['departure_from']}, To: {booking['destination']}, Depart: {booking['departure_time']}, Seat: {booking['seat_no']}, Status: {booking['status']}\n"
-                messagebox.showinfo("Your Bookings", bookings_text)
-            else:
-                messagebox.showinfo("Your Bookings", "No bookings found for your account.")
+    def _load_passenger_bookings(self):
+        if self.reservation_app_instance:
+            self.reservation_app_instance._passenger_reservations_view()
+            self.reservation_app_instance.pack(fill="both", expand=True)
+            self.title(f"Booking Details - {self.current_user_role.capitalize()}")
         else:
-            messagebox.showerror("Error", "This action is only for passengers.")
+            messagebox.showinfo("Info", "Crew dashboard not initialized.")
 
     def _logout(self):
         self.current_user_id = None

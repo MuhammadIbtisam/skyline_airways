@@ -65,8 +65,8 @@ class CrewApp(ttk.Frame):
 
         ttk.Button(button_frame, text="Update Crew", command=self._open_update_crew_form).pack(side="left",
                                                                                                padx=5)
-        ttk.Button(button_frame, text="Delete Crew", command=self._delete_selected_crew).pack(side="left",
-                                                                                              padx=5)
+        # ttk.Button(button_frame, text="Delete Crew", command=self._delete_selected_crew).pack(side="left",
+        #                                                                                       padx=5)
         ttk.Button(button_frame, text="Add New Crew", command=self._open_add_crew_form).pack(side="left",
                                                                                              padx=5)
 
@@ -400,6 +400,7 @@ class CrewApp(ttk.Frame):
         button_frame.pack(pady=10)
 
         ttk.Button(button_frame, text="Update Flight", command=self._open_update_flight_form).pack(side="left", padx=5)
+
     def _populate_flights_tree(self, tree):
         for item in tree.get_children():
             tree.delete(item)

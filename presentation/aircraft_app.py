@@ -55,8 +55,8 @@ class AircraftApp(ttk.Frame):
 
         ttk.Button(button_frame, text="Update Aircraft", command=self._open_update_aircraft_form).pack(side="left",
                                                                                                        padx=5)
-        ttk.Button(button_frame, text="Delete Aircraft", command=self._delete_selected_aircraft).pack(side="left",
-                                                                                                      padx=5)
+        # ttk.Button(button_frame, text="Delete Aircraft", command=self._delete_selected_aircraft).pack(side="left",
+        #                                                                                               padx=5)
         ttk.Button(button_frame, text="Add New Aircraft", command=self._open_add_aircraft_form).pack(side="left",
                                                                                                      padx=5)
 

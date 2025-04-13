@@ -1,3 +1,5 @@
+from sqlalchemy import select
+
 from data_access.passenger_dao import PassengerDAO
 from data_access.user_dao import UserDAO
 from sqlalchemy.orm import Session
@@ -33,3 +35,6 @@ class PassengerService:
                 return None
         else:
             return None
+
+    def get_passenger_reservations(self, db: Session, passenger_id: int):
+        return self.passenger_dao.get_passengers_reservation(db, passenger_id)

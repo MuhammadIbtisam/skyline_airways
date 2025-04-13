@@ -55,7 +55,7 @@ class AirlineApp(ttk.Frame):
         button_frame.pack(pady=10)
 
         ttk.Button(button_frame, text="Update Airline", command=self._open_update_airline_form).pack(side="left", padx=5)
-        ttk.Button(button_frame, text="Delete Airline", command=self._delete_selected_airline).pack(side="left", padx=5)
+        # ttk.Button(button_frame, text="Delete Airline", command=self._delete_selected_airline).pack(side="left", padx=5)
         ttk.Button(button_frame, text="Add New Airline", command=self._open_add_airline_form).pack(side="left", padx=5)
 
     def _populate_airlines_tree(self, tree):
