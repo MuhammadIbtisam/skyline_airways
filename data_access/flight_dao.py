@@ -48,9 +48,7 @@ class FlightDAO:
 
     def delete_flight(self, db: Session, flight_id: int):
         db_flight = db.query(Flight).filter(Flight.id == flight_id).first()
-        print('I am here')
         if db_flight:
-            print('I am here 2')
             db.delete(db_flight)
             db.commit()
             return True

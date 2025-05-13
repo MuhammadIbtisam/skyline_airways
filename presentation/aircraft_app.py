@@ -1,9 +1,15 @@
 import os
+import sys
 import tkinter as tk
 import webbrowser
 import pandas as pd
 import plotly.express as px
 from tkinter import ttk, messagebox
+
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
 
 from matplotlib import pyplot as plt
 

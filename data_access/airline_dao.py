@@ -30,9 +30,7 @@ class AirlineDAO:
 
     def delete_airline(self, db: Session, airline_id: int):
         db_airline = db.query(Airline).filter(Airline.id == airline_id).first()
-        print('I am here')
         if db_airline:
-            print('I am here 2')
             db.delete(db_airline)
             db.commit()
             return True

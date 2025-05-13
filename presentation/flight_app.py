@@ -1,8 +1,17 @@
+import os
+import sys
 import tkinter as tk
+
+
 import webbrowser
 import pandas as pd
 import plotly.express as px
 from tkinter import ttk, messagebox
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+
 from database.db_connection import get_db, init_db
 from business_logic.flight_service import FlightService
 from business_logic.aircraft_service import AircraftService
@@ -352,7 +361,6 @@ class FlightApp(ttk.Frame):
         db = next(get_db())
         try:
             self.flight_service.delete_flight(db, flight_id)
-            print('I am her e4')
             messagebox.showinfo("Success", f"Flight ID {flight_id} deleted successfully.")
             self._populate_flights_tree(self.flights_tree)
             self.update_window.destroy()

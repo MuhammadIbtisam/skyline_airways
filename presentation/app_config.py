@@ -1,5 +1,12 @@
 # presentation/app_config.py
+import os
+import sys
 import tkinter as tk
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+
 from data_access.db_connect import create_session
 from business_logic.flight_service import FlightService
 # from business_logic.aircraft_service import AircraftService

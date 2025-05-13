@@ -1,5 +1,11 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import ttk, messagebox
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
 from database.db_connection import get_db
 from business_logic.passenger_service import PassengerService
 
