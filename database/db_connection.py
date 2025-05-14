@@ -23,8 +23,11 @@ def get_db():
 
 def init_db():
     if os.path.exists(DB_NAME):
-        os.remove(DB_NAME)
-        print("Existing database removed.")
+        try:
+            os.remove(DB_NAME)
+            print("Existing database removed.")
+        except PermissionError:
+            print(f"Cannot remove existing database: {DB_NAME}")
 
     # Create new SQLite connectio
     conn_sqlite = sqlite3.connect(DB_NAME)

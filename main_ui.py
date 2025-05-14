@@ -183,6 +183,12 @@ class RootApp(tk.Tk):
     def _logout(self):
         self.current_user_id = None
         self.current_user_role = None
+
+        self.current_user_role = None
+        self.crew_app_instance = None
+        self.reservation_app_instance = None
+        self.cs_app_instance = None
+
         for widget in self.winfo_children():
             widget.destroy()
         self.title("Skyline Airways System - Login")
