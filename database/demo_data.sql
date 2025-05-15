@@ -207,25 +207,3 @@ insert into CustomerSupport (reservation_id, issue, resolution, is_closed)
 values (3, 'Flight cancellation request', 'Refund processed', 1),
        (5, 'Seat change request', 'Upgraded to business class', 1),
        (2, 'Lost baggage', 'Filed a claim, tracking in progress', 0);
-
-insert into FlightAnalytics (flight_id, total_passengers, revenue)
-values (1, 180, 36000.00),
-       (2, 150, 28500.00),
-       (3, 120, 24000.00),
-       (4, 200, 42000.00),
-       (5, 175, 35000.00),
-       (6, 160, 32000.00),
-       (7, 130, 26000.00),
-       (8, 190, 40000.00),
-       (9, 110, 22000.00),
-       (10, 140, 28000.00),
-       (11, 155, 31000.00),
-       (12, 125, 25000.00),
-       (13, 170, 34000.00),
-       (14, 145, 29000.00),
-       (15, 180, 36000.00),
-       (16, 195, 41000.00),
-       (17, 200, 42000.00),
-       (18, 165, 33000.00),
-       (19, 175, 35000.00),
-       (20, 140, 28000.00);
